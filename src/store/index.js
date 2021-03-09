@@ -9,7 +9,7 @@ export default new Vuex.Store({
     isLogin: false // 是否登录
   },
   mutations: {
-    getUserInfo (state, payload) {
+    setUserInfo (state, payload) {
       state.userInfo = payload
     },
     setIsLogin (state, payload) {

@@ -10,7 +10,7 @@
             <span class="iconfont iconicon_footbar_gs_nor"></span>
           </template>
         </van-tabbar-item>
-        <van-tabbar-item to=""
+        <van-tabbar-item to="/question"
           >刷题
           <template #icon>
             <span class="iconfont iconicon_footbar_st_sel"></span>

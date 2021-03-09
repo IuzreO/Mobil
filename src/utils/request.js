@@ -5,7 +5,7 @@ import axios from 'axios'
 // 导入totas
 import { Toast } from 'vant'
 // 导入 lcaol 的操作方法
-import { removeLocal } from '@/utils/local'
+import { getLocal, removeLocal } from '@/utils/local'
 // 导入 store
 import store from '@/store/index.js'
 // 导入 router
@@ -16,6 +16,13 @@ const _http = axios.create({
 // 请求拦截器
 _http.interceptors.request.use(
   config => {
+    // 判断是否需要携带请求头存在
+    if (config.needToken) {
+      // 获取token
+      const token = getLocal()
+      // 设置请求头
+      config.headers.authorization = `Bearer ${token}`
+    }
     return config
   },
   error => {

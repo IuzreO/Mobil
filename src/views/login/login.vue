@@ -1,10 +1,7 @@
 <template>
   <div class="login">
-    <van-nav-bar>
-      <template #left>
-        <van-icon name="down" />
-      </template>
-    </van-nav-bar>
+    <!-- 导航区域 -->
+    <hmNavBar path="/find"></hmNavBar>
     <div class="content">
       <h3>您好,请登录</h3>
       <van-form ref="form" :rules="rules">
@@ -84,58 +81,64 @@ export default {
   },
   methods: {
     // 定义mapMutations方法
-    ...mapMutations(['getUserInfo', 'setIsLogin']),
+    ...mapMutations(['setUserInfo', 'setIsLogin']),
     // 获取验证码
-    getCode () {
-      this.$refs.form
-        .validate('mobile')
-        .then(() => {
-          // 验证通过后发送请求,点击后提示加载中
-          this.$toast.loading('加载中')
+    async getCode () {
+      try {
+        await this.$refs.form.validate('mobile')
+        // 验证通过后发送请求,点击后提示加载中
+        this.$toast.loading('加载中')
+        try {
           // 调用封装好的接收验证码接口
-          getCodeApi({
-            mobile: this.form.mobile
-          }).then(res => {
-            this.$toast.success(res.data.data)
-            this.form.code = res.data.data
-            const timer = setInterval(() => {
-              this.totalTime--
-              if (this.totalTime <= 0) {
-                // 清空定时器
-                clearInterval(timer)
-                // 将时间还原为60
-                this.totalTime = 60
-              }
-            }, 100)
-          })
-        })
-        .catch(() => {
-          this.$toast.fail('请输入正确的手机号')
-        })
+          const res = await getCodeApi({ mobile: this.form.mobile })
+          this.$toast.success(res.data.data)
+          this.form.code = res.data.data
+          const timer = setInterval(() => {
+            this.totalTime--
+            if (this.totalTime <= 0) {
+              // 清空定时器
+              clearInterval(timer)
+              // 将时间还原为60
+              this.totalTime = 60
+            }
+          }, 100)
+        } catch (error) {
+          this.$toast.fail(error.message)
+        }
+      } catch (error) {
+        this.$toast.fail(error.message)
+      }
     },
     // 登录验证
-    submit () {
-      this.$refs.form
-        .validate()
-        .then(() => {
-          submitApi({
+    async submit () {
+      try {
+        await this.$refs.form.validate()
+        try {
+          const res = await submitApi({
             mobile: this.form.mobile,
             code: this.form.code
-          }).then(res => {
-            // 将token保存到localStorage
-            setLocal(res.data.data.jwt)
-            this.getUserInfo(res.data.data.user) // 保存用户信息
-            this.setIsLogin(true) // 修改登录状态为ture
-            this.$toast.loading('登录成功,跳转中')
-            this.$router.push('/home')
           })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .catch(() => {
-          this.$toast.fail('验证失败')
-        })
+          // 将token保存到localStorage
+          setLocal(res.data.data.jwt)
+          this.setUserInfo(res.data.data.user) // 保存用户信息
+          this.setIsLogin(true) // 修改登录状态为ture
+          this.$toast.loading('登录成功,跳转中')
+          // console.log(this.$route)
+          // 判断当前页面的路由中是否存在_redirect
+          const _redirect = this.$route.query._redirect
+          if (_redirect) {
+            // 如果存在,则跳转到上一个页面
+            this.$router.push(_redirect)
+          } else {
+            // 不存在则跳转到/my
+            this.$router.push('/my')
+          }
+        } catch (error) {
+          this.$toast.fail(error.message)
+        }
+      } catch (error) {
+        this.$toast.fail('请输入验证码')
+      }
     }
   }
 }
@@ -143,13 +146,6 @@ export default {
 
 <style lang="less">
 .login {
-  .van-nav-bar {
-    .van-icon-down {
-      font-size: 20px;
-      color: #181a39;
-      transform: rotate(90deg);
-    }
-  }
   .content {
     margin: 0 15px;
     h3 {

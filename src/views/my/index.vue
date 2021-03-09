@@ -92,12 +92,12 @@
       <!-- 其他数据 -->
       <div class="otherData">
         <van-cell-group>
-          <van-cell title="我的面经分享" value="98" is-link></van-cell>
-          <van-cell title="我的消息" value="98" is-link></van-cell>
-          <van-cell title="收藏的题库" value="98" is-link></van-cell>
-          <van-cell title="收藏的企业" value="98" is-link></van-cell>
-          <van-cell title="我的错题" value="98" is-link></van-cell>
-          <van-cell title="收藏的面试经验" value="98" is-link></van-cell>
+          <van-cell title="我的面经分享" value="99+" is-link></van-cell>
+          <van-cell title="我的消息" value="99+" is-link></van-cell>
+          <van-cell title="收藏的题库" value="99+" is-link></van-cell>
+          <van-cell title="收藏的企业" value="99+" is-link></van-cell>
+          <van-cell title="我的错题" value="99+" is-link></van-cell>
+          <van-cell title="收藏的面试经验" value="99+" is-link></van-cell>
         </van-cell-group>
       </div>
     </div>

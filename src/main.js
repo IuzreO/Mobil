@@ -13,6 +13,15 @@ import 'vant/lib/index.css'
 // 使用 vant
 // 导入字体图标的样式
 import '@/style/iconfont/iconfont.css'
+// 导入全局的hmnavBar组件
+// import myNavBar from '@/components/hmNavBar.vue'
+// // 全局注册
+// // Vue.component('组件名称','组件对象')
+// Vue.component(myNavBar.name, myNavBar)
+// 导入自定义封装的myPlugin插件
+import myPlugin from '@/utils/myPlugin'
+// 使用
+Vue.use(myPlugin)
 Vue.use(Vant)
 Vue.config.productionTip = false
 

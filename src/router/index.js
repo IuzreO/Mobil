@@ -6,6 +6,8 @@ import home from '@/views/home/index.vue'
 import my from '@/views/my/index.vue'
 import find from '@/views/find/index.vue'
 import question from '@/views/question/index.vue'
+import info from '@/views/info/index.vue'
+import editInfo from '@/views/editInfo/index.vue'
 // 导入local
 import { getLocal } from '@/utils/local'
 // 导入toast
@@ -35,7 +37,8 @@ const routes = [
         component: my,
         meta: {
           // 判断用户是否需要登录
-          needLogin: true
+          needLogin: true,
+          needTab: true
         }
       },
       {
@@ -47,7 +50,29 @@ const routes = [
         component: question,
         meta: {
           // 判断用户是否需要登录
-          needLogin: true
+          needLogin: true,
+          // 判断在home中是否需要tabBar
+          needTab: true
+        }
+      },
+      {
+        path: '/info',
+        component: info,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: true,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
+      },
+      {
+        path: '/editInfo',
+        component: editInfo,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: true,
+          // 判断在home中是否需要tabBar
+          needTab: false
         }
       }
     ]

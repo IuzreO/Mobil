@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <!-- 路由出口 -->
     <router-view></router-view>
   </div>
@@ -14,4 +14,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+html,
+body,
+.app {
+  height: 100%;
+}
+</style>

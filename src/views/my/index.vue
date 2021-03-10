@@ -8,7 +8,7 @@
           <div class="remark">{{ userInfo.intro }}</div>
         </div>
         <div class="right">
-          <img :src="baseURL + userInfo.avatar" alt="" />
+          <img :src="baseURL + userInfo.avatar" alt="" @click="toInfo" />
         </div>
       </div>
       <div class="items">
@@ -49,6 +49,7 @@
           is-link
           :value="userInfo.position"
           class="jobCell"
+          @click="$router.push('/editInfo?property=position')"
         >
           <template #icon>
             <span
@@ -116,14 +117,22 @@ export default {
   computed: {
     ...mapState(['userInfo'])
   },
+  methods: {
+    toInfo () {
+      this.$router.push('/info')
+    }
+  },
   created () {
     console.log(this.userInfo)
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .myInfo {
+  height: 100%;
+  background-color: #f7f4f5;
+
   .header {
     height: 215px;
     background: linear-gradient(45deg, #ce0031, #b8002c);
@@ -178,7 +187,6 @@ export default {
     }
   }
   .content {
-    background-color: #f7f4f5;
     padding: 0 15px;
     padding-bottom: 66px;
     border-top: 1px solid transparent;

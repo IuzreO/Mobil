@@ -144,7 +144,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .login {
   .content {
     margin: 0 15px;

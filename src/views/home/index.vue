@@ -3,7 +3,12 @@
     <!-- 路由出口 -->
     <router-view />
     <div class="nav">
-      <van-tabbar route active-color="#e40137" inactive-color="#b4b4bd">
+      <van-tabbar
+        v-if="$route.meta.needTab"
+        route
+        active-color="#e40137"
+        inactive-color="#b4b4bd"
+      >
         <van-tabbar-item to=""
           >公司
           <template #icon>
@@ -39,8 +44,9 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .home {
+  height: 100%;
   .nav {
     .iconfont {
       font-size: 24px;

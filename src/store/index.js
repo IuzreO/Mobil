@@ -24,7 +24,7 @@ export default new Vuex.Store({
   },
   actions: {
     // 定义一个方法:用来得到新获取的用户信息,并将信息提交到mutations
-    async setUserInfo (context) {
+    async getUserInfo (context) {
       // 发送获取用户信息请求
       const res = await getUserInfoApi()
       // 将获取的数据保存到mutations中

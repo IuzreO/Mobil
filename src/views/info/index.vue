@@ -62,7 +62,7 @@
 
 <script>
 // 导入Vuex中的辅助函数
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 // 导入area
 import area from '@/utils/area'
 // 导入删除token组件
@@ -82,6 +82,7 @@ export default {
   methods: {
     // 定义mapMutations方法
     ...mapMutations(['setIsLogin', 'setUserInfo']),
+    ...mapActions(['getUserInfo']),
     // 实现退出功能
     signOut () {
       this.$dialog
@@ -109,7 +110,8 @@ export default {
       // // 将修改成功后的数据保存到vuex中
       // this.setUserInfo(res.data.data)
       this.$toast.success('修改成功')
-      this.$store.dispatch('setUserInfo')
+      // this.$store.dispatch('getUserInfo')
+      this.getUserInfo()
     },
     onGenderCancel () {
       this.genderShow = false
@@ -124,7 +126,8 @@ export default {
       })
       // 刷新数据
       this.$toast.success('修改成功')
-      this.$store.dispatch('setUserInfo')
+      // this.$store.dispatch('getUserInfo')
+      this.getUserInfo()
     },
     onAreaCancel () {
       this.areaShow = false

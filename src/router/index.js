@@ -21,6 +21,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    redirect: '/find'
+  },
+  {
     path: '/home',
     redirect: '/my'
   },
@@ -36,21 +40,26 @@ const routes = [
         path: '/my',
         component: my,
         meta: {
-          // 判断用户是否需要登录
+          // 判断用户是否需要登录和需要导航栏
           needLogin: true,
           needTab: true
         }
       },
       {
         path: '/find',
-        component: find
+        component: find,
+        meta: {
+          // 判断用户是否需要登录和需要导航栏
+          needLogin: true,
+          needTab: true
+        }
       },
       {
         path: '/question',
         component: question,
         meta: {
           // 判断用户是否需要登录
-          needLogin: true,
+          needLogin: false,
           // 判断在home中是否需要tabBar
           needTab: true
         }

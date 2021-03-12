@@ -1,6 +1,10 @@
 <template>
   <div class="hmNavBar">
-    <van-nav-bar @click-left="$router.push(path)" @click-right="save">
+    <van-nav-bar
+      @click-left="$router.push(path)"
+      @click-right="save"
+      :fixed="fixed"
+    >
       <template #left>
         <van-icon name="down" />
       </template>
@@ -13,7 +17,6 @@
     </van-nav-bar>
   </div>
 </template>
-
 <script>
 export default {
   name: 'hmNavBar',
@@ -23,7 +26,9 @@ export default {
     // path要跳转的路由
     path: String,
     // 是否需要保存按钮
-    hasSave: Boolean
+    hasSave: Boolean,
+    // 是否固定导航
+    fixed: Boolean
   },
   data () {
     return {}

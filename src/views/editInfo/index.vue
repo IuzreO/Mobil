@@ -23,7 +23,7 @@
 // 导入修改数据的api
 import { editUserInfoApi, editUserImgApi } from '@/api/userInfo'
 // 导入vuex的辅助函数
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -61,6 +61,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getUserInfo']),
     async saveData () {
       // 点击按钮后触发
       this.$toast.loading('加载中')
@@ -80,7 +81,8 @@ export default {
       this.$router.push(this.prop === 'position' ? '/my' : '/info')
       // 刷新数据
       this.$toast.success('修改成功')
-      this.$store.dispatch('setUserInfo')
+      // this.$store.dispatch('getUserInfo')
+      this.getUserInfo()
     },
     // 文件上传完毕后会触发 after-read 回调函数，获取到对应的 file 对象。
     async afterRead (file) {

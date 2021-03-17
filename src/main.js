@@ -20,7 +20,6 @@ import '@/style/iconfont/iconfont.css'
 // Vue.component(myNavBar.name, myNavBar)
 // 导入自定义封装的myPlugin插件
 import myPlugin from '@/utils/myPlugin'
-
 // 使用
 Vue.use(myPlugin)
 Vue.use(Vant)

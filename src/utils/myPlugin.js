@@ -17,8 +17,13 @@ myPlugin.install = function (Vue) {
   Vue.component(hmNavBar.name, hmNavBar)
   Vue.component(shareItem.name, shareItem)
   // 设置一个全局过滤器
+  // 相对时间
   Vue.filter('dayJsTime', function (value) {
     return dayjs().from(value)
+  })
+  // 格式化时间
+  Vue.filter('normalTime', function (value) {
+    return dayjs(value).format('YYYY.MM.HH')
   })
 }
 // 将方法暴露出去

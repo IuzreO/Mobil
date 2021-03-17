@@ -1,6 +1,6 @@
 <template>
   <div class="shareItem">
-    <div class="title">
+    <div class="title" @click="$router.push('/shareDetail/' + item.id)">
       {{ item.title }}
     </div>
     <!-- van-multi-ellipsis--l2   van内置class,最多显示2行 -->

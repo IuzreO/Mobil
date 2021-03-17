@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <!-- 路由出口 -->
-    <router-view />
+    <keep-alive include="find">
+      <router-view />
+    </keep-alive>
     <div class="nav">
       <van-tabbar
         v-if="$route.meta.needTab"

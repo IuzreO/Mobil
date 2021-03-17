@@ -1,6 +1,6 @@
 <template>
   <div class="findCell">
-    <van-cell is-link center>
+    <van-cell is-link center @click="goto">
       <template #title>
         <div class="title">{{ title }}</div>
       </template>
@@ -18,6 +18,12 @@ export default {
   props: ['title'],
   data () {
     return {}
+  },
+  methods: {
+    // 点击这个单元格之后要进行跳转，跳转的路径由使用者来决定
+    goto () {
+      this.$emit('goto')
+    }
   }
 }
 </script>

@@ -8,6 +8,10 @@ import find from '@/views/find/index.vue'
 import question from '@/views/question/index.vue'
 import info from '@/views/info/index.vue'
 import editInfo from '@/views/editInfo/index.vue'
+import shareList from '@/views/shareList/index.vue'
+import skillSearch from '@/views/search/index.vue'
+import market from '@/views/market/index.vue'
+import shareDetail from '@/views/shareDetail/index.vue'
 // 导入local
 import { getLocal } from '@/utils/local'
 // 导入toast
@@ -50,7 +54,7 @@ const routes = [
         component: find,
         meta: {
           // 判断用户是否需要登录和需要导航栏
-          needLogin: true,
+          needLogin: false,
           needTab: true
         }
       },
@@ -80,6 +84,46 @@ const routes = [
         meta: {
           // 判断用户是否需要登录
           needLogin: true,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
+      },
+      {
+        path: '/shareList',
+        component: shareList,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: false,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
+      },
+      {
+        path: '/skillSearch',
+        component: skillSearch,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: false,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
+      },
+      {
+        path: '/market',
+        component: market,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: false,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
+      },
+      {
+        path: '/shareDetail/:id',
+        component: shareDetail,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: false,
           // 判断在home中是否需要tabBar
           needTab: false
         }

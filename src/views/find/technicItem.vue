@@ -1,9 +1,7 @@
 <template>
   <div class="technicItem">
     <div class="left">
-      <div class="top">
-        {{ item.title }}
-      </div>
+      <div class="top" v-html="item.title"></div>
       <div class="buttom">
         <span class="time">{{ item.created_at | dayJsTime }}</span>
         <span style="margin-right:15px"

@@ -29,7 +29,14 @@
             >
               <div class="year">{{ item.year }}</div>
               <div class="moneyData">
-                <div class="money">￥{{ item.salary }}</div>
+                <div
+                  class="money"
+                  :style="{
+                    width: Math.round((item.salary / topSalary) * 100) + '%'
+                  }"
+                >
+                  ￥{{ item.salary }}
+                </div>
               </div>
               <div class="markup">
                 <div class="iconUpandDown" v-if="item.percent">
@@ -125,7 +132,9 @@ export default {
       // list加载状态
       loading: false,
       // 数据源是否加载完毕
-      finished: false
+      finished: false,
+      // 最高薪资
+      topSalary: 0
     }
   },
   created () {
@@ -149,9 +158,10 @@ export default {
     // 调用获取热门数据接口
     async getCharthotData () {
       const res = await getCharthotDataApi({})
-      // 将得到的面试技巧数据赋值
+      // 将得到的热门数据赋值
       this.city = res.data.data.city
       this.position = res.data.data.position
+      this.topSalary = res.data.data.topSalary
       // 翻转数组
       this.yearSalaryList = res.data.data.yearSalary.reverse()
       this.newyearSalaryList = this.yearSalaryList.slice(0, 4)
@@ -256,7 +266,6 @@ export default {
           background-color: #ebdfdf;
           border-radius: 5px;
           .money {
-            width: 66%;
             background-color: #fe6d67;
             color: #fff;
             text-align: right;

@@ -11,8 +11,12 @@
         </div>
       </div>
       <div class="star">
-        <span class="num">{{ item.star ? 'item.star' : 0 }}</span
-        ><van-icon name="good-job-o" />
+        <van-icon
+          @click="starComments"
+          name="good-job-o"
+          :color="getComments ? 'red' : '#ccc'"
+        />
+        <span class="num">{{ item.star ? item.star : 0 }}</span>
       </div>
     </div>
     <div class="commentMsg">
@@ -32,6 +36,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+// 导入封装好的点赞文章接口
+import { starCommentsApi } from '@/api/technic'
 export default {
   props: ['item'],
   data () {
@@ -40,8 +47,45 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getUserInfo']),
+    // 点击头像回复
     clickImg () {
       this.$emit('clickImg', this.item)
+    },
+    // 点赞文章
+    async starComments () {
+      // 判断用户是否登录
+      // if (!this.$store.state.isLogin) {
+      //   this.$toast.fail('请先登录')
+      //   // 跳转到登录页,携带当前地址
+      //   this.$router.push(`/login?_redirect=${this.$route.path}`)
+      //   return
+      // }
+      if (!this.$login()) {
+        return
+      }
+      this.$toast.loading('加载中')
+      const res = await starCommentsApi(this.item.id)
+      // 将最新的点赞次数赋值给评论
+      this.item.star = res.data.data.num
+      // 更新vuex中的数据
+      this.getUserInfo()
+      // 判断是点击收藏还是取消收藏
+      if (res.data.data.list.includes(+this.item.id)) {
+        this.$toast.success('点赞成功')
+      } else {
+        this.$toast.success('取消点赞')
+      }
+    }
+  },
+  computed: {
+    ...mapState(['userInfo']),
+    // 将判断方法写进计算属性
+    getComments () {
+      return (
+        this.userInfo.starComments &&
+        this.userInfo.starComments.includes(+this.item.id)
+      )
     }
   }
 }
@@ -89,7 +133,7 @@ export default {
         font-family: PingFangSC, PingFangSC-Regular;
         font-weight: 400;
         color: #b4b4bd;
-        margin-right: 5px;
+        margin-left: 5px;
       }
       .van-icon-good-job-o {
         font-size: 16px;

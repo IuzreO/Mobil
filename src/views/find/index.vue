@@ -145,6 +145,11 @@ export default {
     // // 调用面经分享接口的方法
     // this.getShare()
   },
+  // 缓存页面显示时,滚动条回到相应的位置
+  // keep alive 的钩子函数
+  activated () {
+    window.scrollTo(0, this.$route.meta.scrollTop)
+  },
   methods: {
     // 调用获取面试技巧数据列表
     async getTechnic () {
@@ -265,6 +270,7 @@ export default {
           margin: 0 5px;
           background-color: #ebdfdf;
           border-radius: 5px;
+          line-height: 18px;
           .money {
             background-color: #fe6d67;
             color: #fff;

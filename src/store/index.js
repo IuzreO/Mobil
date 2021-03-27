@@ -31,5 +31,12 @@ export default new Vuex.Store({
       context.commit('setUserInfo', res.data.data)
     }
   },
+  getters: {
+    getMyProp: function (state) {
+      return function (props, id) {
+        return state.userInfo[props] && state.userInfo[props].includes(+id)
+      }
+    }
+  },
   modules: {}
 })

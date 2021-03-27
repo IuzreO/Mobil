@@ -1,12 +1,19 @@
 // 导入顶部插件
 import hmNavBar from '@/components/hmNavBar.vue'
 import shareItem from '@/components/shareItem.vue'
+// 导入 store
+import store from '@/store'
+// 导入 toast
+import { Toast } from 'vant'
+// 导入 router
+import router from '@/router'
 // 导入day.js插件
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
+
 // 自定义Vue插件
 const myPlugin = {}
 // 添加一个install方法
@@ -25,6 +32,17 @@ myPlugin.install = function (Vue) {
   Vue.filter('normalTime', function (value) {
     return dayjs(value).format('YYYY.MM.HH')
   })
+  // 全局的登录方法
+  Vue.prototype.$login = function () {
+    // 判断用户是否登录
+    if (!store.state.isLogin) {
+      Toast.fail('对不起，您还没有登录')
+      router.push(`/login?_redirect=${window.location.hash}`)
+      return false
+    } else {
+      return true
+    }
+  }
 }
 // 将方法暴露出去
 export default myPlugin

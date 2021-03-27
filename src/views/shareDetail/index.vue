@@ -1,6 +1,6 @@
 <template>
   <div class="shareDetail" v-if="articleInfo.author">
-    <hm-nav-bar path="/find"></hm-nav-bar>
+    <hm-nav-bar path="/find" :fixed="true"></hm-nav-bar>
     <div class="content">
       <!-- 标题区域 -->
       <div class="title">
@@ -45,9 +45,31 @@
       <div class="reply">
         <span @click="showPop">我来补充两句</span>
       </div>
-      <div class="collect"><van-icon name="star-o" /><span>66</span></div>
-      <div class="star"><van-icon name="good-job-o" /><span>88</span></div>
-      <div class="share"><van-icon name="share-o" /><span>99</span></div>
+      <!-- 收藏 -->
+      <div class="collect">
+        <!-- 判断用户是否登录,且有无保存文章的ID -->
+        <van-icon
+          name="star-o"
+          :class="{
+            active: getMyProp('collectArticles', id)
+          }"
+          @click="collectArticles"
+        ></van-icon
+        ><span>{{ articleInfo.collect }} </span>
+      </div>
+      <!-- 点赞 -->
+      <div class="star">
+        <van-icon
+          name="good-job-o"
+          :class="{
+            active: getMyProp('starArticles', id)
+          }"
+          @click="starAriticles"
+        /><span>{{ articleInfo.star }}</span>
+      </div>
+      <div class="share">
+        <van-icon name="share-o" /><span>{{ articleInfo.share }}</span>
+      </div>
     </div>
     <!-- 弹出层 -->
     <van-popup v-model="isShow" position="bottom">
@@ -76,15 +98,41 @@
 // 导入封装好的comment组件
 import comment from './comment'
 // 导入封装好的数据接口
-import { getarticleDataApi, getCommentApi, sendCommentApi } from '@/api/technic'
+import {
+  getarticleDataApi,
+  getCommentApi,
+  sendCommentApi,
+  collectArticlesApi,
+  starArticlesApi
+} from '@/api/technic'
+// 导入辅助函数
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   // 注册组件
   components: {
     comment
   },
+  computed: {
+    ...mapState(['userInfo']),
+    ...mapGetters(['getMyProp'])
+    // 将判断方法写进计算属性
+    // getStar () {
+    //   return (
+    //     this.userInfo.starArticles &&
+    //     this.userInfo.starArticles.includes(+this.id)
+    //   )
+    // },
+    // getCollect () {
+    //   return (
+    //     this.userInfo.collectArticles &&
+    //     this.userInfo.collectArticles.includes(+this.id)
+    //   )
+    // }
+  },
   data () {
     return {
       id: this.$route.params.id,
+      // 文章信息
       articleInfo: {},
       baseURL: process.env.VUE_APP_URL,
       // 加载状态
@@ -114,6 +162,58 @@ export default {
     this.getarticleData()
   },
   methods: {
+    ...mapActions(['getUserInfo']),
+    // 文章点赞
+    async starAriticles () {
+      // 判断用户是否登录
+      // if (!this.$store.state.isLogin) {
+      //   this.$toast.fail('请先登录')
+      //   // 跳转到登录页,携带当前地址
+      //   this.$router.push(`/login?_redirect=${this.$route.path}`)
+      //   return
+      // }
+      if (!this.$login()) {
+        return
+      }
+      this.$toast.loading('加载中')
+      const res = await starArticlesApi(this.id)
+      // 将最新的点赞次数赋值给文章
+      this.articleInfo.star = res.data.data.num
+      // 更新vuex中的数据
+      this.getUserInfo()
+      // 判断是点击收藏还是取消收藏
+      if (res.data.data.list.includes(+this.id)) {
+        this.$toast.success('点赞成功')
+      } else {
+        this.$toast.success('取消点赞')
+      }
+    },
+    // 收藏文章
+    async collectArticles () {
+      // 判断用户是否登录
+      // if (!this.$store.state.isLogin) {
+      //   this.$toast.fail('请先登录')
+      //   // 跳转到登录页,携带当前地址
+      //   this.$router.push(`/login?_redirect=${this.$route.path}`)
+      //   return
+      // }
+      if (!this.$login()) {
+        return
+      }
+      this.$toast.loading('加载中')
+      // 调用接口
+      const res = await collectArticlesApi(this.id)
+      // 将最新的收藏数量赋值给文章
+      this.articleInfo.collect = res.data.data.num
+      // 更新vuex中的数据
+      this.getUserInfo()
+      // 判断是点击收藏还是取消收藏
+      if (res.data.data.list.includes(+this.id)) {
+        this.$toast.success('收藏成功')
+      } else {
+        this.$toast.success('取消收藏')
+      }
+    },
     // 点击头像回复
     clickImg (item) {
       this.isShow = true
@@ -124,12 +224,16 @@ export default {
     // 点击发送评论
     async sendComment () {
       // 判断用户是否登录
-      if (!this.$store.state.isLogin) {
-        this.$toast.fail('请先登录')
-        // 跳转到登录页,携带当前地址
-        this.$router.push(`/login?_redirect=${this.$route.path}`)
+      // if (!this.$store.state.isLogin) {
+      //   this.$toast.fail('请先登录')
+      //   // 跳转到登录页,携带当前地址
+      //   this.$router.push(`/login?_redirect=${this.$route.path}`)
+      //   return
+      // }
+      if (!this.$login()) {
         return
       }
+      this.$toast.loading('加载中')
       if (this.isReply === false) {
         const res = await sendCommentApi({
           content: this.commentValue,
@@ -146,12 +250,11 @@ export default {
           parent: this.commentObj.id
         })
         // 将返回的数据动态添加到子组件中
-        console.log(newRes)
-        this.commentObj.children_comments.push(newRes.data.data),
-          // 关闭弹出层
-          (this.isShow = false),
-          // 清空评论内容
-          (this.commentValue = '')
+        this.commentObj.children_comments.push(newRes.data.data)
+        // 关闭弹出层
+        this.isShow = false
+        // 清空评论内容
+        this.commentValue = ''
         // 提示用户评论成功
         this.$toast.success('评论成功')
       }
@@ -196,7 +299,7 @@ export default {
       font-weight: 500;
       color: #181a39;
       background-color: #fff;
-      padding: 8px 15px;
+      padding: 15px 15px;
     }
     .author {
       display: flex;
@@ -310,6 +413,9 @@ export default {
       font-size: 14px;
       text-align: right;
     }
+  }
+  .active {
+    color: red;
   }
 }
 </style>

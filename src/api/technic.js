@@ -45,3 +45,36 @@ export function sendCommentApi (data) {
     data
   })
 }
+// 封装收藏面经接口
+export function collectArticlesApi (id) {
+  return _http({
+    url: '/articles/collect',
+    method: 'post',
+    needToken: true,
+    data: {
+      id
+    }
+  })
+}
+// 封装点赞面经接口
+export function starArticlesApi (article) {
+  return _http({
+    url: '/articles/star',
+    method: 'post',
+    needToken: true,
+    data: {
+      article
+    }
+  })
+}
+// 封装评论点赞接口
+export function starCommentsApi (id) {
+  return _http({
+    url: '/article-comments/star',
+    method: 'post',
+    needToken: true,
+    data: {
+      id
+    }
+  })
+}

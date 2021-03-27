@@ -12,6 +12,7 @@ import shareList from '@/views/shareList/index.vue'
 import skillSearch from '@/views/search/index.vue'
 import market from '@/views/market/index.vue'
 import shareDetail from '@/views/shareDetail/index.vue'
+import interview from '@/views/interview/index.vue'
 // 导入local
 import { getLocal } from '@/utils/local'
 // 导入toast
@@ -63,7 +64,7 @@ const routes = [
         component: question,
         meta: {
           // 判断用户是否需要登录
-          needLogin: false,
+          needLogin: true,
           // 判断在home中是否需要tabBar
           needTab: true
         }
@@ -127,6 +128,16 @@ const routes = [
           // 判断在home中是否需要tabBar
           needTab: false
         }
+      },
+      {
+        path: '/interview/:type/:city',
+        component: interview,
+        meta: {
+          // 判断用户是否需要登录
+          needLogin: true,
+          // 判断在home中是否需要tabBar
+          needTab: false
+        }
       }
     ]
   }
@@ -141,6 +152,14 @@ router.beforeEach(async (to, from, next) => {
   // from 对象 从哪来
   // 参数(路由信息,地址,名字,url)
   // next()函数,继续跳转,反之则不会跳转
+  // 缓存的页面保存滚动的位置
+  // 在导航前置守卫中记录页面离开时滚动条位置
+  // 保存当前页面滚动的距离
+  from.meta.scrollTop =
+    document.documentElement.scrollTop ||
+    window.pageYOffset ||
+    document.body.scrollTop
+  // next()
   // 判断页面是否需要登录
   if (to.meta.needLogin) {
     // 页面需要登录判断是否存在token
@@ -172,6 +191,10 @@ router.beforeEach(async (to, from, next) => {
     // 当前页面不需要登录 则直接跳转
     next()
   }
+  // 未缓存的页面滚动到页面顶部
+  router.afterEach(() => {
+    window.scrollTo(0, 0)
+  })
 })
 
 export default router

@@ -1,4 +1,3 @@
-# heimamm_mobil
 
 ## Project setup
 ```
